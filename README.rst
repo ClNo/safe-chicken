@@ -1,4 +1,3 @@
-# safe-chicken
 Chicken Door Control using Python, MQTT and JS-WebApp:
 
 1. A Raspberry Pi is running the Python door control software and triggers two relays for open/close commands.
