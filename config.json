@@ -1,0 +1,38 @@
+{
+  "time_control": {
+    "latitude": 47.0,
+    "longitude": 7.0,
+    "minutes_after_sunrise": 15,
+    "minutes_after_sunset": 15
+  },
+  "mqtt_client": {
+    "broker_hostname": "192.168.21.5",
+    "broker_port": 1883,
+    "client_name": "SafeChickenController"
+  },
+  "topic_conf": {
+    "sun_times": "safechicken/sun_times",
+    "door_sun_times_conf": "safechicken/door_sun_times_conf",
+    "door_prio": "safechicken/door_prio",
+    "static_time": "safechicken/static_time",
+    "force_operation": "safechicken/force_operation",
+    "command_out": "safechicken/command_out",
+    "last_commands": "safechicken/last_commands",
+    "door_closed_log": "safechicken/door_closed_log",
+    "door_lifesign": "safechicken/door_lifesign"
+  },
+  "controller": {
+    "force_time_expire_minutes": 180
+  },
+  "dispatcher": {
+    "start_action_delay": 2
+  },
+  "io": {
+    "out_ready_led": 4,
+    "out_network_status_led": 17,
+    "out_open_command": 5,
+    "out_close_command": 6,
+    "in_door_closed": {"pin": 25, "active_state": true},
+    "command_out_pulse_time_s": 2
+  }
+}

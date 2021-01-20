@@ -1,0 +1,10 @@
+[Unit]
+Description=Safe Chicken Door Control Service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/home/pi/safechicken/raspberry/startup_safechicken.sh &
+
+[Install]
+WantedBy=multi-user.target
