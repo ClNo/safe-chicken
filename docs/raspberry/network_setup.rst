@@ -25,16 +25,16 @@ If you have two networks in range, you can add the priority option to choose bet
 
 .. code::
 
-network={
-    ssid="HomeOneSSID"
-    psk="passwordOne"
-    priority=1
-    id_str="homeOne"
-}
+   network={
+       ssid="HomeOneSSID"
+       psk="passwordOne"
+       priority=1
+       id_str="homeOne"
+   }
 
-network={
-    ssid="HomeTwoSSID"
-    psk="passwordTwo"
-    priority=2
-    id_str="homeTwo"
-}
+   network={
+       ssid="HomeTwoSSID"
+       psk="passwordTwo"
+       priority=2
+       id_str="homeTwo"
+   }
