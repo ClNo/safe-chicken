@@ -3,13 +3,14 @@ import json
 
 import paho.mqtt.client as mqtt
 import time
+import logging
 
 
 def test_connection(mqtt_config):
-    print(mqtt_config)
+    logging.info(mqtt_config)
 
     def on_message(client, userdata, message):
-        print("received message: ", str(message.payload.decode("utf-8")))
+        logging.info("received message: ", str(message.payload.decode("utf-8")))
 
     mqtt_broker = mqtt_config['broker_hostname']
 
@@ -28,7 +29,7 @@ def test_connection(mqtt_config):
 
 
 def _on_mqtt_message(mqtt_client, paho_client, userdata, message):
-    print('received message {0}: {1}'.format(message.topic, str(message.payload.decode("utf-8"))))
+    logging.info('received message {0}: {1}'.format(message.topic, str(message.payload.decode("utf-8"))))
     topic_func = mqtt_client.get_topic_func(message.topic)
     if topic_func:
         topic_func(message.topic, json.loads(message.payload.decode("utf-8")))
@@ -46,14 +47,14 @@ class MqttClient:
             self.client.connect(self.mqtt_config['broker_hostname'])
             self.client.on_message = functools.partial(_on_mqtt_message, self)
             self.client.loop_start()
-            print('MQTT connected to {0}'.format(self.mqtt_config['broker_hostname']))
+            logging.info('MQTT connected to {0}'.format(self.mqtt_config['broker_hostname']))
 
             self.topic_list = topic_list
 
             for topic_elem in topic_list:
                 self.client.subscribe(topic_elem[0])
         except Exception as e:
-            print('Error on MQTT connection (retry later): {0}'.format(e))
+            logging.warning('Error on MQTT connection (retry later): {0}'.format(e))
 
     def disconnect(self):
         self.client.loop_stop()

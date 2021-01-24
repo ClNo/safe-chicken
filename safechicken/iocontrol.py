@@ -5,6 +5,7 @@ from datetime import datetime
 from gpiozero import LED, DigitalOutputDevice, DigitalInputDevice, Device
 from gpiozero.pins.mock import MockFactory
 import threading
+import logging
 
 import os
 if not os.uname()[4].startswith("arm"):
@@ -72,13 +73,13 @@ class IoController:
         return copy.deepcopy(self.door_closed_log)
 
     def on_door_closed(self):
-        print('input: door closed')
+        logging.info('input: door closed')
         self.door_closed_log.insert(0, {'state': 'open', 'datetime': datetime.now().isoformat(timespec='minutes')})
         if len(self.door_closed_log) > 10:
             del self.door_closed_log[-1]
 
     def on_door_not_closed(self):
-        print('input: door NOT closed/opening/open')
+        logging.info('input: door NOT closed/opening/open')
         self.door_closed_log.insert(0, {'state': 'close', 'datetime': datetime.now().isoformat(timespec='minutes')})
         if len(self.door_closed_log) > 10:
             del self.door_closed_log[-1]
@@ -86,7 +87,7 @@ class IoController:
     def _check_and_open(self, reason):
         self.out_close_command.off()
         self.out_open_command.on()
-        print('io: open command, reason {0}'.format(reason))
+        logging.info('io: open command, reason {0}'.format(reason))
         self._start_clear_timer()
 
         self.last_command_list.insert(0, {'command': 'open', 'datetime': datetime.now().isoformat(timespec='minutes'), 'reason': reason})
@@ -96,7 +97,7 @@ class IoController:
     def _check_and_close(self, reason):
         self.out_open_command.off()
         self.out_close_command.on()
-        print('io: close command, reason {0}'.format(reason))
+        logging.info('io: close command, reason {0}'.format(reason))
         self._start_clear_timer()
 
         self.last_command_list.insert(0, {'command': 'close', 'datetime': datetime.now().isoformat(timespec='minutes'), 'reason': reason})
@@ -112,7 +113,7 @@ class IoController:
         self.clear_timer.start()
 
     def _clear_command_out(self):
-        print('io: clear command out')
+        logging.info('io: clear command out')
         self.out_open_command.off()
         self.out_close_command.off()
 

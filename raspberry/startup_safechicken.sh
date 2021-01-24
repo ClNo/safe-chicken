@@ -14,4 +14,4 @@ if [ -e log/application.log ]; then
 fi
 
 chown -R pi:pi log
-su pi -c 'source venv/bin/activate && /bin/bash -c "python3 -m safechicken.main config.json 2>&1 >>log/application.log &"'
+su pi -c 'source venv/bin/activate && /bin/bash -c "python3 -m safechicken.main config.json --logfile log/application.log &"'
