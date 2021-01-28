@@ -157,7 +157,10 @@ def main():
                         help='Set logging level. Example --loglevel debug|info|warning|error, default=info')
     parser.add_argument('-lf', '--logfile', default=None, help='Logging to a file if set; default: to console')
     args = parser.parse_args()
-    logging.basicConfig(filename=args.logfile, level=args.loglevel.upper())
+
+    log_format = '%(asctime)-15s|%(module)+11s.%(funcName)-20s| %(message)s'
+    logging.basicConfig(filename=args.logfile, level=args.loglevel.upper(), format=log_format)
+    logging.info('Starting Safe Chicken Door Control...')
 
     global config_dict
     config_dict = json.load(args.config_file)
@@ -191,7 +194,7 @@ def main():
 
     while True:
         # sleep time but note: MQTT client is listening and always active
-        time.sleep(60)
+        time.sleep(30)
         # logging.info('.')
 
         # periodical checks

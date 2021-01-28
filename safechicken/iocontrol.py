@@ -25,8 +25,8 @@ class IoController:
                                                  active_state=self.config_dict['in_door_closed']['active_state'],
                                                  pull_up=None,
                                                  bounce_time=1.0)
-        self.in_door_closed.when_activated = self.on_door_closed
-        self.in_door_closed.when_deactivated = self.on_door_not_closed
+        self.in_door_closed.when_activated = self.on_door_not_closed
+        self.in_door_closed.when_deactivated = self.on_door_closed
 
         self.systemtime_synced = False
         self.clear_timer = None
@@ -39,7 +39,7 @@ class IoController:
             self._check_and_open('force')
         elif command_out['current'] == 'close':
             self._check_and_close('force')
-        self.last_command_out = command_out
+        self.last_command_out = copy.deepcopy(command_out)
 
     def execute_pending_command(self):
         if self.last_command_out['current']:
@@ -74,13 +74,13 @@ class IoController:
 
     def on_door_closed(self):
         logging.info('input: door closed')
-        self.door_closed_log.insert(0, {'state': 'open', 'datetime': datetime.now().isoformat(timespec='minutes')})
+        self.door_closed_log.insert(0, {'state': 'close', 'datetime': datetime.now().isoformat(timespec='minutes')})
         if len(self.door_closed_log) > 10:
             del self.door_closed_log[-1]
 
     def on_door_not_closed(self):
         logging.info('input: door NOT closed/opening/open')
-        self.door_closed_log.insert(0, {'state': 'close', 'datetime': datetime.now().isoformat(timespec='minutes')})
+        self.door_closed_log.insert(0, {'state': 'open', 'datetime': datetime.now().isoformat(timespec='minutes')})
         if len(self.door_closed_log) > 10:
             del self.door_closed_log[-1]
 
@@ -122,7 +122,6 @@ class IoController:
             # do nothing of time is not correct
             return False
 
-        # <------ TODO: avoid skipping a timed command because after the 'next_time' the time has alredy been changed to the next!
         return check_time < datetime.now()
 
 

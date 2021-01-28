@@ -4,7 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=idle
-ExecStart=/home/pi/safechicken/raspberry/startup_safechicken.sh &
+ExecStart=/home/pi/safe-chicken/raspberry/startup_safechicken.sh &
 
 [Install]
 WantedBy=multi-user.target

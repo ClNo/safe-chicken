@@ -2,17 +2,16 @@
 
 RASPIIP="${1}"
 RASPISSH="pi@${RASPIIP}"
-REMOTE_BASEDIR="/home/pi/safechicken"
+REMOTE_BASEDIR="/home/pi/safe-chicken"
 
 ssh "${RASPISSH}" "mkdir -p ${REMOTE_BASEDIR}"
 
 # --- 1. copy everything except the venv
 
-shopt -s extglob
-scp -r !(venv) "${RASPISSH}:${REMOTE_BASEDIR}/"
+scp -r docroot raspberry safechicken tests config.json requirements.txt "${RASPISSH}:${REMOTE_BASEDIR}/"
 
 if [[ $? -ne 0 ]]; then
-  echo "copy failed, do not check venv"
+  echo "copy failed"
   exit 1
 fi
 

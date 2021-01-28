@@ -1,3 +1,4 @@
+import copy
 import functools
 import json
 
@@ -28,39 +29,48 @@ def test_connection(mqtt_config):
     client.loop_stop()
 
 
-def _on_mqtt_message(mqtt_client, paho_client, userdata, message):
-    logging.info('received message {0}: {1}'.format(message.topic, str(message.payload.decode("utf-8"))))
-    topic_func = mqtt_client.get_topic_func(message.topic)
-    if topic_func:
-        topic_func(message.topic, json.loads(message.payload.decode("utf-8")))
-
-
 class MqttClient:
     def __init__(self, mqtt_config, topic_config):
         self.mqtt_config = mqtt_config
         self.topic_config = topic_config
         self.client = mqtt.Client(mqtt_config['client_name'])
+        self.host = self.mqtt_config['broker_hostname']
         self.topic_list = []
+        self.published_backup = {}
 
     def connect_subscribe(self, topic_list):
         try:
-            self.client.connect(self.mqtt_config['broker_hostname'])
-            self.client.on_message = functools.partial(_on_mqtt_message, self)
-            self.client.loop_start()
-            logging.info('MQTT connected to {0}'.format(self.mqtt_config['broker_hostname']))
-
             self.topic_list = topic_list
+            self.client.on_connect = functools.partial(_on_connect, self)
+            self.client.on_message = functools.partial(_on_mqtt_message, self)
+            self.client.connect(self.host)
+            self.client.loop_start()
 
-            for topic_elem in topic_list:
-                self.client.subscribe(topic_elem[0])
         except Exception as e:
-            logging.warning('Error on MQTT connection (retry later): {0}'.format(e))
+            logging.warning('Error on MQTT connection (retry later): {0} (topic list size: {1})'.
+                            format(e, len(topic_list)))
+
+    def subscribe_now(self):
+        try:
+            for topic_elem in self.topic_list:
+                topic_name = topic_elem[0]
+                logging.info('Subscribe for topic {0}'.format(topic_name))
+                self.client.subscribe(topic_name)
+
+            # re-publish everything again. this is needed if an IO changes its state while the MQTT client is disconnected
+            for topic_elem in self.published_backup:
+                self.client.publish(topic=topic_elem, payload=self.published_backup[topic_elem], retain=True)
+
+        except Exception as e:
+            logging.warning('Error on MQTT connection (retry later): {0} (topic list size: {1})'.
+                            format(e, len(self.topic_list)))
 
     def disconnect(self):
         self.client.loop_stop()
 
     def publish(self, topic, content_dict):
-        self.client.publish(topic=topic, payload=json.dumps(content_dict), retain=True)
+        self.published_backup[topic] = json.dumps(content_dict)
+        self.client.publish(topic=topic, payload=self.published_backup[topic], retain=True)
 
     def publish_volatile(self, topic, content_dict):
         self.client.publish(topic=topic, payload=json.dumps(content_dict), retain=False)
@@ -73,3 +83,20 @@ class MqttClient:
 
     def is_connected(self):
         return self.client.is_connected()
+
+
+def _on_mqtt_message(mqtt_client: MqttClient, paho_client, userdata, message):
+    logging.info('received message {0}: {1}'.format(message.topic, str(message.payload.decode("utf-8"))))
+    topic_func = mqtt_client.get_topic_func(message.topic)
+    if topic_func:
+        topic_func(message.topic, json.loads(message.payload.decode("utf-8")))
+
+
+def _on_connect(mqtt_client: MqttClient, client, userdata, flags, rc):
+    if rc == 0:
+        logging.info('MQTT connected to {0} (topic list size: {1})'.
+                     format(mqtt_client.host, len(mqtt_client.topic_list)))
+        mqtt_client.subscribe_now()
+
+    else:
+        logging.info('Failed to connect to {0}, return code {1}'.format(mqtt_client.host, rc))

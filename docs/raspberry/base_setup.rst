@@ -26,6 +26,15 @@ Disable Bluetooth
 
 :code:`sudo systemctl disable bluetooth`
 
+Disable Serial Console
+----------------------
+
+.. code::
+
+   sudo systemctl disable hciuart
+   sudo apt purge bluez
+   sudo apt autoremove
+
 Copy your SSH public keys
 -------------------------
 

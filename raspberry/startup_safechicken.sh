@@ -4,7 +4,7 @@
 # this file is started in the system start and runs as root
 #-------------------------------------------------------------------------------
 
-PROJ_BASEPATH="/home/pi/safechicken"
+PROJ_BASEPATH="/home/pi/safe-chicken"
 
 cd ${PROJ_BASEPATH}
 
