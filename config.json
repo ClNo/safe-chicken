@@ -3,7 +3,7 @@
     "latitude": 47.0,
     "longitude": 7.0,
     "minutes_after_sunrise": 15,
-    "minutes_after_sunset": 15
+    "minutes_after_sunset": 30
   },
   "mqtt_client": {
     "broker_hostname": "192.168.21.5",

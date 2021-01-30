@@ -22,7 +22,15 @@ Date.prototype.addHours = function(h) {
 }
 
 var onConnected = function onConnected(connected) {
-  $("#connected").html(connected ? 'Yes' : 'No');
+  if(connected)  {
+    $("#connected").html('Yes');
+    $('#connected').removeClass('bg-danger').addClass('bg-success');
+  }
+  else {
+    $("#connected").html('No');
+    $('#connected').removeClass('bg-success').addClass('bg-danger');
+    $('#txt-status-lifesign').removeClass('bg-danger').removeClass('bg-warning').removeClass('bg-success');
+  }
 }
 
 var onDoorLifeSign = function onDoorLifeSign(selector, dataContent) {
@@ -62,7 +70,7 @@ var onDoorSensor = function onDoorSensor(selector, dataContent) {
 
 $(document).ready(function() {
 
-  $("#clientId").html(CLIENT_ID);
+  // makes not much sense: $("#clientId").html(CLIENT_ID);
 
   // https://www.jonthornton.com/jquery-timepicker/
   // https://github.com/jonthornton/jquery-timepicker

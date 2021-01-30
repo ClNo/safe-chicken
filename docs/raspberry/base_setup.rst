@@ -81,5 +81,5 @@ After a re-login you can get the temperature by calling *temp*:
 .. code::
 
    pi@raspberrypi:~ $ temp
-   temp=40.8'C
+   temp=48.0'C
 

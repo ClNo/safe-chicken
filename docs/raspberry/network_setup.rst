@@ -1,13 +1,19 @@
 Raspberry Network Setup
 =======================
 
-Ethernet
---------
+Static IP
+---------
 
-:code:`sudo nano /etc/dhcp/dhclient.conf`
+Which network interface do you use? Check it with :code:`ip r`, then edit :code:`sudo nano /etc/dhcp/dhclient.conf`.
 
-*For static IP, consult /etc/dhcpcd.conf and 'man dhcpcd.conf'*
+Example in my network:
 
+.. code-block::
+
+   interface wlan0
+   static ip_address=192.168.21.12/24
+   static routers=192.168.21.1
+   static domain_name_servers=192.168.21.1
 
 
 WLAN

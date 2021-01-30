@@ -42,8 +42,19 @@ class IoController:
         self.last_command_out = copy.deepcopy(command_out)
 
     def execute_pending_command(self):
-        if self.last_command_out['current']:
+        if (not self.last_command_out) or ('next_time' not in self.last_command_out) or (not self.last_command_out['next_time']):
+            # no time at all -> do nothing
+            return
+
+        if not self._time_passed(self.last_command_out['next_time']):
+            # waiting time not passed yet
+            return
+
+        logging.info('Waiting time {0} passed'.format(self.last_command_out['next_time']))
+
+        if self.last_command_out['current'] is not None:
             # force operation already done in update_commands()
+            logging.info('Skipping automatic action because of force command!')
             return
 
         # there is no force operation so check if we need to execute the next command
@@ -53,6 +64,7 @@ class IoController:
         elif (self.last_command_out['next'] == 'close') and self._time_passed(self.last_command_out['next_time']):
             self._check_and_close(self.last_command_out['reason_next'])
         # else: only appears if time not set; do nothing
+        logging.info('Automatic action for {0} done'.format(self.last_command_out['next_time']))
 
     def update_status_out(self, systemtime_synced, is_mqtt_connected):
         if systemtime_synced:

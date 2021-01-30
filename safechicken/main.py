@@ -89,6 +89,13 @@ class Dispatcher:
         pass
 
     def command_changed(self, command_out):
+        if (not command_out) or ('current' not in command_out):
+            return
+
+        if command_out['current'] and (command_out['current'] == self.last_command_bak['current']):
+            # do not handle force commands here: if the force command ist still active, reject any new commands here
+            return
+
         if command_out != self.last_command_bak:
             self.last_command_bak = deepcopy(command_out)
             logging.info('Next action is: {0}'.format(command_out))
