@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx.ext.autodoc',
     'sphinxcontrib.blockdiag',
+    'sphinxcontrib.plantuml',
     'sphinx_rtd_theme'
 ]
 

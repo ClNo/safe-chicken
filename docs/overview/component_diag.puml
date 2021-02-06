@@ -1,0 +1,45 @@
+@startuml
+
+skinparam ranksep 20
+skinparam dpi 150
+skinparam arrowThickness 0.7
+skinparam packageTitleAlignment left
+skinparam usecaseBorderThickness 0.4
+skinparam defaultFontSize 12
+skinparam rectangleBorderThickness 1
+
+rectangle "Home NAS" {
+database "MQTT" {
+    [MQTT Broker]
+}
+frame "http Server" {
+    [nginx]
+}
+}
+
+rectangle "Chicken House" {
+frame "Door Controller (Raspi)" as door_controller {
+    [Python MQTT Client]
+    [Time Control]
+    [Relays]
+    [Sensor]
+}
+frame "Motor Control" {
+    [Electronics]
+    [Motor]
+}
+}
+
+frame "User Interface" {
+[JS MQTT Client]
+[JS/HTML/CSS]
+}
+
+
+[JS MQTT Client] <--> [MQTT Broker]
+[Python MQTT Client] <--> [MQTT Broker]
+[nginx] -> [JS/HTML/CSS]
+[Relays] --> [Electronics]
+[Electronics] -> [Motor]
+
+@enduml

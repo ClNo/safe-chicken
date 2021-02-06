@@ -19,7 +19,7 @@ Example in my network:
 WLAN
 ----
 
-See :ref:`https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md`
+See `WLAN setup <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>`_
 
 :code:`sudo raspi-config`
 
