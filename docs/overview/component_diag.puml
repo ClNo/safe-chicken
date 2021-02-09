@@ -30,7 +30,7 @@ frame "Motor Control" {
 }
 }
 
-frame "User Interface" {
+frame "Wep App / User Interface" {
 [JS MQTT Client]
 [JS/HTML/CSS]
 }

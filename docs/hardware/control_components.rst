@@ -1,5 +1,5 @@
-Door Control Components
-=======================
+Door Control Hardware
+=====================
 
 .. table:: Hardware Components
 

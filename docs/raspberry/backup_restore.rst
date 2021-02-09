@@ -4,7 +4,7 @@ Backup and Restore
 Here you learn how to backup the flash card containing the operating system and your application in case it's getting
 lost and you want to restore it later.
 
-Plugin your Raspberry flash card in a desktop PC, then start a partition manager like *gparted* or *kdepartitionmanager*.
+Plug in your Raspberry's flash card in a desktop PC, then start a partition manager like *gparted* or *kdepartitionmanager*.
 
 .. note::
 
