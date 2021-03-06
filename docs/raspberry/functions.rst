@@ -24,3 +24,9 @@ Or in Python:
        print('timesync working')
    else:
        print('timesync NOT working')
+
+Output Signals
+--------------
+
+The door open and door close signals are both an **impulse of 2 seconds** each which let the door motor electronics
+activate its motor on the requested side.

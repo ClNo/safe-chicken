@@ -1,15 +1,15 @@
 MQTT Broker Docker Setup
 ========================
 
-Variant
--------
+Docker Guest OS
+---------------
 
 Docker eclipse-mosquitto
 
 version 1.6, no SSL because of certificates
 
 
-Host Persistend Directories
+Host Persistent Directories
 ---------------------------
 
 Make directory for :code:`/Container/eclipse-mosquitto-16`
@@ -65,7 +65,13 @@ Shared Folders:
 HTTP server for the Web App
 ---------------------------
 
-Offical nginx
+.. note::
+
+   The MQTT broker could also provide some files via http but is made too simple as the
+   mime types cannot be configured. So JS files will not be interpreted by the browers.
+   Therefore an nginx is used here to provide the web app files.
+
+Docker OS used: offical nginx
 
 Name: nginx-safechicken
 CPU Limit: 10%
@@ -88,8 +94,8 @@ chown nginx:nginx .
 chown nginx:nginx -R ./*
 
 
-MQTT Client
------------
+MQTT Client for Testing
+-----------------------
 
 Proposed client: https://mqtt-explorer.com/
 

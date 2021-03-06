@@ -1,5 +1,5 @@
-Raspberry Base Setup
-====================
+Raspberry Pi Base Setup
+=======================
 
 OS Installation
 ---------------
